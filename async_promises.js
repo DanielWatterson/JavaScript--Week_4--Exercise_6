@@ -4,12 +4,14 @@
 // - If userId is negative or zero, reject with an error
 // - User data should include: id, name, email, and registrationDate
 
+
+
 let fetchUserData = (userId) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             if (userId > 0) {
                 resolve({
-                    id: userId,
+                    id: userId,     
                     name: `User${userId}`,
                     email: `user${userId}@example.com`,
                     registrationDate: new Date(),
@@ -20,19 +22,29 @@ let fetchUserData = (userId) => {
         }, 1500);
     });};
 
-// TODO: Create a function that that fetches users and their posts in parallel
-function fetchUsersAndPosts(userIds) {
-    return Promise.all(userIds.map(id => 
-        fetchUserData(id)
-            .then(user => {
-                return fetchUserPosts(id)
-                    .then(posts => ({ ...user, posts }))
-                    .catch(err => ({ ...user, posts: [], error: err.message }));
-            })
-            .catch(err => ({ id, error: err.message }))
-    ));
-}
+fetchUserData(1).then(console.log).catch(console.error);
 
+// TODO: Create a function that that fetches users and their posts in parallel
+async function fetchUsersAndPosts(userIds) {
+    return Promise.all(
+        userIds.map(async id =>{
+            try{
+                const user = await fetchUserData(id);
+
+                try{
+                    const posts = await fetchUserPosts(id);
+                    return {...user, posts };
+                } catch(postError){
+                    return {... user, posts: [], error: postError.message}
+                }
+
+             } catch (userError){
+                return {id, error: userError.message };
+            }
+        })
+    );
+}
+fetchUserDataAndPosts(1).then(console.log).catch(console.error);
 // TODO: Create a Promise that simulates fetching user posts
 // - Should resolve after 1 second
 // - Return an array of post objects
@@ -64,3 +76,9 @@ function fetchUserDataAndPosts(userId) {
                 .then(posts => ({ ...user, posts }));
         });
 }
+
+fetchUserDataAndPosts(1)
+    .then(result => {
+        console.log(JSON.stringify(result, null, 2));
+    })
+    .catch(console.error);
