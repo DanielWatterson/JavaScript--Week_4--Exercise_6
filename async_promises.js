@@ -145,8 +145,6 @@ fetchMultipleUsers([1, 2, 3, 4])
         console.log(JSON.stringify(results, null, 2));
     })
     .catch(console.error);
-    return true;
-
 
 // TODO: Create a function that fetches users and their posts in parallel - Marco
 // - Fetch user data for multiple users
