@@ -22,7 +22,11 @@ let fetchUserData = (userId) => {
         }, 1500);
     });};
 
-fetchUserData(1).then(console.log).catch(console.error);
+fetchUserData(1)
+    .then(result => {
+        console.log(JSON.stringify(result, null, 2));
+    })
+    .catch(console.error);
 
 // TODO: Create a function that that fetches users and their posts in parallel
 async function fetchUsersAndPosts(userIds) {
@@ -44,7 +48,13 @@ async function fetchUsersAndPosts(userIds) {
         })
     );
 }
-fetchUserDataAndPosts(1).then(console.log).catch(console.error);
+
+fetchUserDataAndPosts(1)
+    .then(result => {
+        console.log(JSON.stringify(result, null, 2));
+    })
+    .catch(console.error);
+    
 // TODO: Create a Promise that simulates fetching user posts
 // - Should resolve after 1 second
 // - Return an array of post objects
