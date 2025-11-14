@@ -132,6 +132,20 @@ fetchUserDataAndPostsAsync(1)
 // - Handle errors for individual user fetches
 // - Return array of successfully fetched users
 
+function fetchMultipleUsers(userIds) {
+    return Promise.all(
+        userIds.map(id =>
+            fetchUserData(id).catch(error => ({ id, error: error.message }))
+        )
+    );
+}
+
+fetchMultipleUsers([1, 2, 3, 4])
+    .then(results => {
+        console.log(JSON.stringify(results, null, 2));
+    })
+    .catch(console.error);
+    return true;
 
 
 // TODO: Create a function that fetches users and their posts in parallel - Marco
@@ -140,9 +154,45 @@ fetchUserDataAndPostsAsync(1)
 // - Combine user and posts data
 // - Handle errors appropriately
 
+function fetchUsersWithPostsParallel(userIds) {
+    return Promise.all().
+        userIds.map(async id => {
+            try {fetchMultipleUsers
 
+                const user = await fetchUserData(id);
+                const posts = await fetchUserPosts(id);
+                fetchUsersWithPostsParallel([1, 2, -3, 4])
+    .then(results => {
+        console.log(JSON.stringify(results, null, 2));
+    }
+)
+    .catch(console.error)
+                return { ...user, posts };
+            } catch (error) {
+                return { id, error: error.message };
+            }
+        })
+};
 
 // TODO: Test success cases - Marco
 // - Test single user fetch
 // - Test multiple user fetch
 // - Test error handling
+
+fetchUserData(2)
+    .then(user => {
+        console.log("Single User Fetch Success:", JSON.stringify(user, null, 2));
+    })
+    .catch(console.error);
+
+fetchMultipleUsers([1, 2, -3, 4])
+    .then(results => {
+        console.log("Multiple Users Fetch Success:", JSON.stringify(results, null, 2));
+    })
+    .catch(console.error);
+
+fetchUserData(-1)
+    .then(user => {
+        console.log("This should not log:", user);
+    })
+    .catch(console.error);
